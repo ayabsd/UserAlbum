@@ -1,6 +1,6 @@
-# UserAlbum
+## UserAlbum
 Simple app that loads users albums
-## Development. 
+## Development
 Including:
 - ViewModel
 - LiveData

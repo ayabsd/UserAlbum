@@ -4,40 +4,33 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ab.useralbum.R
-import com.ab.useralbum.data.RetrofitBuilder
 import com.ab.useralbum.model.User
-import com.ab.useralbum.ui.base.ViewModelFactory
 import com.ab.useralbum.ui.view.adapter.UserAapter
 import com.ab.useralbum.ui.view.viewmodel.UserViewModel
 import com.ab.useralbum.utils.Status
-import com.mindorks.retrofit.coroutines.data.api.ApiHelper
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
+
+@AndroidEntryPoint
 class UserListActivity : AppCompatActivity() {
-    private lateinit var viewModel: UserViewModel
     private lateinit var adapter: UserAapter
+    private val viewModel: UserViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-            setupViewModel()
             setupUI()
             setupObservers()
         }
 
 
-        private fun setupViewModel() {
-            viewModel = ViewModelProviders.of(
-                this,
-                ViewModelFactory(ApiHelper(RetrofitBuilder.apiService))
-            ).get(UserViewModel::class.java)
-        }
 
         private fun setupUI() {
             recyclerView.layoutManager = LinearLayoutManager(this)
@@ -52,7 +45,7 @@ class UserListActivity : AppCompatActivity() {
         }
 
         private fun setupObservers() {
-            viewModel.getUsers().observe(this, Observer {
+            viewModel.users.observe(this, Observer {
                 it?.let { resource ->
                     when (resource.status) {
                         Status.SUCCESS -> {

@@ -12,7 +12,7 @@ import com.ab.useralbum.model.User
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun characterDao(): UserDao
+    abstract fun characterDao(): Dao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null

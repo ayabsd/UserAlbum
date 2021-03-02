@@ -6,10 +6,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ab.useralbum.R
 import com.ab.useralbum.model.User
+import com.ab.useralbum.ui.view.adapter.HeaderAdapter
 import com.ab.useralbum.ui.view.adapter.UserAapter
 import com.ab.useralbum.ui.view.viewmodel.UserViewModel
 import com.ab.useralbum.utils.Status
@@ -20,6 +22,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 @AndroidEntryPoint
 class UserListActivity : AppCompatActivity() {
     private lateinit var adapter: UserAapter
+    private lateinit var header: HeaderAdapter
+
     private val viewModel: UserViewModel by viewModels()
 
 
@@ -34,14 +38,20 @@ class UserListActivity : AppCompatActivity() {
 
         private fun setupUI() {
             recyclerView.layoutManager = LinearLayoutManager(this)
+
             adapter = UserAapter(arrayListOf())
+            header = HeaderAdapter()
+
             recyclerView.addItemDecoration(
                 DividerItemDecoration(
                     recyclerView.context,
                     (recyclerView.layoutManager as LinearLayoutManager).orientation
                 )
             )
-            recyclerView.adapter = adapter
+
+            val concatAdapter = ConcatAdapter(header, adapter)
+
+            recyclerView.adapter = concatAdapter
         }
 
         private fun setupObservers() {
@@ -51,7 +61,9 @@ class UserListActivity : AppCompatActivity() {
                         Status.SUCCESS -> {
                             recyclerView.visibility = View.VISIBLE
                             progressBar.visibility = View.GONE
-                            resource.data?.let { users -> retrieveList(users) }
+                            resource.data?.let { users -> retrieveList(users)
+                                header.updateUserNumber(users.size)
+                            }
                         }
                         Status.ERROR -> {
                             recyclerView.visibility = View.VISIBLE

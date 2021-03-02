@@ -13,7 +13,7 @@ import com.ab.useralbum.model.User
 
 
 @Dao
-interface UserDao {
+interface Dao {
 
     @Query("SELECT * FROM user")
     fun getAllUsers() : LiveData<List<User>>

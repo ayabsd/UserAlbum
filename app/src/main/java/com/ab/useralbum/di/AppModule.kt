@@ -3,7 +3,7 @@ package com.ab.useralbum.di
 import android.content.Context
 import com.ab.useralbum.data.ApiService
 import com.ab.useralbum.data.local.AppDatabase
-import com.ab.useralbum.data.local.UserDao
+import com.ab.useralbum.data.local.Dao
 import com.ab.useralbum.remote.RemoteDataSource
 import com.ab.useralbum.repository.UserRespository
 import com.google.gson.Gson
@@ -52,7 +52,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRepository(remoteDataSource: RemoteDataSource,
-                          localDataSource:UserDao) =
+                          localDataSource:Dao) =
         UserRespository(remoteDataSource, localDataSource)
 
 }
